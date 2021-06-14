@@ -427,30 +427,3 @@ def display_summary_statistics(activity_dataframe: pd.DataFrame):
         print()
     else:
         print('[Analysis]: No activities found')
-
-
-def create_activity_dataframe(activity_data: list) -> pd.DataFrame:
-    """
-    Create and return a pandas DataFrame from the activity data list and
-    format the dates / times to simplify visual interpretation.
-
-    Arguments:
-    activity_data - A list of detailed activity data
-
-    Return:
-    A pandas DataFrame of formatted detailed activity data
-    """
-
-    # Configure pandas to display data to 2 decimal places
-    pd.set_option('precision', 2)
-
-    # Create a pandas data frame from the Strava activities list
-    activity_dataframe = pd.DataFrame.from_records(activity_data)
-
-    # Format the activity start dates and moving / elapsed times
-    activity_dataframe.loc[:, 'moving_time_formatted'] = (activity_dataframe['moving_time']
-        .apply(lambda x: str(datetime.timedelta(seconds=x))))
-    activity_dataframe.loc[:, 'elapsed_time_formatted'] = (activity_dataframe['elapsed_time']
-        .apply(lambda x: str(datetime.timedelta(seconds=x))))
-
-    return activity_dataframe

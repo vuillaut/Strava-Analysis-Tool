@@ -118,16 +118,15 @@ def _update_activity_data(access_token: str, file_path: pathlib.Path,
     page_count = 1
     try:
         while True:
-            page = api_instance.get_logged_in_athlete_activities(after=start_time,
-                                                                    page=page_count,
-                                                                    per_page=50)
+            page = api_instance.get_logged_in_athlete_activities(after=start_time, page=page_count,
+                                                                 per_page=50)
 
             if page:
                 for activity in page:
-                    print("[Strava]: Getting detailed activity data for '{}'".format(activity.name))
-
                     # Get detailed activity data for each activity in the page
                     detailed_data = api_instance.get_activity_by_id(activity.id)
+
+                    print("[Strava]: Getting detailed activity data for '{}'".format(activity.name))
 
                     # Convert the detailed activity data into a dictionary and append it to the list
                     # of activity data from the current page
@@ -137,17 +136,15 @@ def _update_activity_data(access_token: str, file_path: pathlib.Path,
             else:
                 print('[Strava]: No new activities found')
                 break
-
-            page = api_instance.get_logged_in_athlete_activities(after=start_time,
-                                                             page=page_count,
-                                                             per_page=25)
-
     finally:
-        # Append the new activities to the existing DataFrame
-        activities_updated = activities.append(pandas.DataFrame(new_activities), ignore_index=True)
+        if new_activities:
+            # Append the new activities to the existing DataFrame
+            activities_updated = activities.append(pandas.DataFrame(new_activities), ignore_index=True)
 
-        # Write the updated activity data to the Strava activities file
-        _write_activity_data_to_file(file_path, activities_updated)
+            # Write the updated activity data to the Strava activities file
+            _write_activity_data_to_file(file_path, activities_updated)
+        else:
+            activities_updated = activities
 
     return activities_updated
 

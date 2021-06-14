@@ -8,6 +8,9 @@ export_geo_data_file()
 Felix van Oost 2020
 """
 
+# Standard library
+import datetime
+
 # Third-party
 from geopandas import GeoDataFrame
 import pandas
@@ -71,6 +74,12 @@ def export_geo_data_file(file_path: str, activity_dataframe: pandas.DataFrame):
     activity_map_dataframe = (activity_dataframe.loc[(activity_dataframe['trainer'] == False) &
                                                      (~activity_dataframe['type']
                                                       .isin(exclude_list))].copy())
+
+    # Format the activity start dates and moving / elapsed times
+    activity_map_dataframe.loc[:, 'moving_time_formatted'] = (activity_map_dataframe['moving_time']
+        .apply(lambda x: str(datetime.timedelta(seconds=x))))
+    activity_map_dataframe.loc[:, 'elapsed_time_formatted'] = (activity_map_dataframe['elapsed_time']
+        .apply(lambda x: str(datetime.timedelta(seconds=x))))
 
     # Convert the activity polylines into coordinates
     activity_map_dataframe.loc[:, 'map_coordinates'] = (activity_map_dataframe.loc[:, 'map']

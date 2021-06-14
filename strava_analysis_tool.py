@@ -2,12 +2,13 @@
 
 Main module for the Strava Analysis Tool.
 
-Felix van Oost 2020
+Felix van Oost 2021
 """
 
 # Standard library
 import argparse
 import datetime
+import pandas
 import pathlib
 import sys
 
@@ -76,13 +77,13 @@ def main():
     # Load the TOML configuration
     config = toml.load(CONFIG_FILE_PATH)
 
-    # Get a list of detailed data for all Strava activities
-    activity_data = strava_data.get_activity_data(pathlib.Path(config['paths']['tokens_file']),
+    # Configure pandas to display data to 2 decimal places
+    pandas.set_option('precision', 2)
+
+    # Get a pandas DataFrame of detailed data for all Strava activities
+    activity_dataframe = strava_data.get_activity_data(pathlib.Path(config['paths']['tokens_file']),
                                                   pathlib.Path(config['paths']['activity_data_file']),
                                                   args.refresh_data)
-
-    # Create a pandas DataFrame from the activity data
-    activity_dataframe = analysis.create_activity_dataframe(activity_data)
 
     if args.date_range_start is not None or args.date_range_end is not None:
         date_mask = [True] * len(activity_dataframe)
