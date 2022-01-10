@@ -377,7 +377,7 @@ def display_mean_distance_plot(activity_df: pd.DataFrame, colour_palette: list):
     plt.show()
 
 
-def display_activity_count_plot(activity_df: pd.DataFrame, colour_palette: list):
+def display_activity_count_plot(activity_df: pd.DataFrame, colour_palette: list, ax=None):
     """
     Generate and display a bar plot of activity counts over time (by type).
 
@@ -391,9 +391,7 @@ def display_activity_count_plot(activity_df: pd.DataFrame, colour_palette: list)
     activity_data = activity_data.set_index('start_date_local')
 
     # Create an empty set of axes
-    fig = plt.figure()
-    fig.set_tight_layout(True)
-    ax = fig.add_subplot(1, 1, 1)
+    ax = plt.gca() if ax is None else ax
 
     # Generate and display the plot
     _generate_activity_count_plot(activity_data, ax, colour_palette)

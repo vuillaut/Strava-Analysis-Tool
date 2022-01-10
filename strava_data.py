@@ -166,7 +166,7 @@ def _update_activity_data(access_token: str, file_path: pathlib.Path,
 
 
 def get_activity_data(tokens_file_path: pathlib.Path, data_file_path: pathlib.Path,
-                      refresh: bool, enable_reverse_geocoding: bool) -> pandas.DataFrame:
+                      refresh=False, enable_reverse_geocoding=False) -> pandas.DataFrame:
     """
     Get and store a pandas DataFrame of detailed data for all Strava activities.
 
