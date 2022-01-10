@@ -118,7 +118,8 @@ def main():
 
     # Display summary and commute statistics
     analysis.display_summary_statistics(activity_df)
-    analysis.display_commute_statistics(activity_df)
+    if 'commute' in activity_df.columns:
+        analysis.display_commute_statistics(activity_df)
 
     if args.export_geo_data or args.export_upload_geo_data:
         # Export the geospatial data from all activities in GeoJSON format
